@@ -14,7 +14,7 @@ const loadDataFromLocalstorage = () => {
 
     const defaultText = `<div class="default-text">
                             <h1>Legal Assistant</h1>
-                            <p>Automated Legal analysis, for everyone</p>
+                            <p>Automated Legal analysis, for everyone.</p>
                         </div>`
 
     chatContainer.innerHTML = localStorage.getItem("all-chats") || defaultText;
@@ -97,14 +97,24 @@ deleteButton.addEventListener("click", () => {
     }
 });
 downloadButton.addEventListener("click", async () => {
-    const fileUrl = "https://example.com/file.txt";
+    /*const fileUrl = "https://example.com/file.txt";
     const fileBlob = new Blob([await fetch(fileUrl).then(response => response.blob())]);
-    const anchorElement = document.createElement("a");
+    const anchorElement = document.createElement("p");
     anchorElement.href = window.URL.createObjectURL(fileBlob);
     anchorElement.download = "file.txt";
-    anchorElement.click();
-    window.URL.revokeObjectURL(anchorElement.href);
-  });
+    anchorElement.click();*/
+    document.addEventListener('click', function() {
+        var anchorElement = document.createElement('a');
+        var fileName = 'file name';
+        var fileLink = 'index.html';
+        anchorElement.href = fileLink;
+        anchorElement.download = fileName;
+        anchorElement.target = '_blank';
+        document.body.appendChild(anchorElement);
+        console.log(anchorElement);
+        anchorElement.click();
+      })
+});
 
 themeButton.addEventListener("click", () => {
     document.body.classList.toggle("light-mode");
