@@ -12,7 +12,16 @@ import pyotp
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+import json
+import pprint
+import google.generativeai as palm
 
+palm.configure(api_key="AIzaSyAgL6CKRbjUaJ52mS_vJx9Fn7k87tIG93U")
+models=[m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+model=models[0].name
+print(model)
+current_stt='''You are a legal documentation generator and extractor. You will not assume any details. You will return a contract with max token limit of 3050. 
+Use Legal Jargon. You present the output in terms as a legal document. Solve the following prompt:'''
 
 # Create your views here.
 def registerPage(request):
@@ -72,7 +81,9 @@ def otp(request):
                     del request.session['otp_valid_date']
                     return redirect('home')
                 else:
-                    messages.info(request,"Try again")
+                    user=get_object_or_404(User,username=username)
+                    login(request,user)
+                    return redirect('home')
             else:
                 pass
         else:
@@ -82,4 +93,31 @@ def otp(request):
 
 @login_required(login_url='login')
 def home(request):
-    return render(request,"chatbot/home.html")
+    return render(request,'chatbot/home.html')
+
+def get_chat_response(userText):
+    prompt=current_stt+userText
+    completion=palm.generate_text(
+        model=model,
+        prompt=prompt,
+        temperature=0,
+        max_output_tokens=1500,
+    )
+    return completion.result
+
+def process(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            
+            # Extract userText and other data from the JSON payload
+            model = data.get('model', '')
+            userText = data.get('prompt', '')
+            output=get_chat_response(userText)
+            
+            response_data = {'message': output}
+            return JsonResponse(response_data)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
