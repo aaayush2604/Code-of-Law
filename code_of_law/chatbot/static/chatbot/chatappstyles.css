@@ -10,7 +10,7 @@
   --icon-color: #ACACBE;
   --icon-hover-bg: #5b5e71;
   --placeholder-color: #dcdcdc;
-  --outgoing-chat-bg: #343441;
+  --outgoing-chat-bg: #343541;
   --incoming-chat-bg: #444654;
   --outgoing-chat-border: #343541;
   --incoming-chat-border: #444654;
@@ -58,7 +58,6 @@ body {
   font-size: 3.3rem;
 }
 .default-text p {
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana,sans-serif
   margin-top: 10px;
   font-size: 1.1rem;
 }
@@ -82,6 +81,11 @@ body {
   width: 100%;
   align-items: flex-start;
   justify-content: space-between;
+}
+.header{
+  display: flex;
+  align-items: center;
+    
 }
 span.material-symbols-rounded {
   user-select: none;
@@ -251,6 +255,3 @@ span.material-symbols-rounded {
   }
 
 }
-
-
-

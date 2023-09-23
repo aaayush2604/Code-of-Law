@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import CreateUserForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-from .utils import sendotp
+from .utils import sendotp, nlpwork
 from datetime import datetime
 from pyotp import totp
 import pyotp
@@ -64,6 +64,9 @@ def logoutPage(request):
     logout(request)
     return redirect('login')
 
+def chat(request):
+    return render(request,"chatbot/chatapp.html")
+
 def otp(request):
     if(request.method=="POST"):
         otp=request.POST['otp']
@@ -96,7 +99,7 @@ def home(request):
     return render(request,'chatbot/home.html')
 
 def get_chat_response(userText):
-    prompt=current_stt+userText
+    prompt=userText
     completion=palm.generate_text(
         model=model,
         prompt=prompt,
@@ -121,3 +124,20 @@ def process(request):
             return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+
+def generate(request):
+    if request.method =='POST':
+        try:
+            data=json.loads(request.body.decode('utf-8'))
+            print('hi there, its aayush')
+            model= data.get('model','')
+            userText=data.get('prompt','')
+            print("nlp work called")
+            output=nlpwork()
+            response_data={'message':output}
+            return JsonResponse(response_data)
+        except json.JSONDecodeError as e:
+            return JsonResponse({'error': 'Invalid JSON payload'},status=400)
+    else:
+        return JsonResponse({'error':'Invalid request methos'}, status=405)

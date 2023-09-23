@@ -20,6 +20,7 @@
           <span id="theme-btn" class="material-symbols-rounded">light_mode</span>
           <span id="delete-btn" class="material-symbols-rounded" >delete</span>
           <span id="download-btn" class="material-symbols-rounded"> download</span>
+          <a href="{% url 'chat' %}"><span id="chat-btn" class="material-symbols-rounded">Chat</span></a>
           <a href="{% url 'logout' %}"><span id="logout-btn" class="material-symbols-rounded">Logout</span></a>
       </div>
     </div>
@@ -80,6 +81,29 @@
                 temp=jsonResponse['message']
             }
         return Promise.resolve(temp);
+
+        // const requestOptions ={
+        //     method: "POST",
+        //     headers:{
+        //         "Content-Type":"application/jason",
+        //         'X-CSRFToken':'{{csrf_token}}'
+        //     },
+        //     body: JSON.stringify({
+        //         model: "text-davinci-003",
+        //         prompt: userText,
+        //         max_tokens: 10000,
+        //         temperature: 0.2,
+        //         n:1,
+        //         stop: null
+        //     }),
+        // };
+        // let temp="Aayush and Ayush";
+        // const response = await fetch("{% url 'generate' %}", requestOptions);
+        // if(response.ok){
+        //     let jsonResponse=await response.json();
+        //     temp=jsonResponse['message']
+        // }
+        // return Promise.resolve(temp);
     }
 
     const copyResponse = (copyBtn) => {
@@ -165,8 +189,8 @@
         anchorElement.click();*/
         document.addEventListener('click', function() {
             var anchorElement = document.createElement('a');
-            var fileName = 'file name';
-            var fileLink = 'index.html';
+            var fileName = 'Output File';
+            var fileLink = 'OutputPDF.pdf';
             anchorElement.href = fileLink;
             anchorElement.download = fileName;
             anchorElement.target = '_blank';
@@ -198,6 +222,10 @@
 
     loadDataFromLocalstorage();
     sendButton.addEventListener("click", handleOutgoingChat);
+
+    const DownloadFile =()=>{
+
+    }
 
   </script>
   </body>
